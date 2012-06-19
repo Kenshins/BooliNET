@@ -515,17 +515,5 @@ namespace BooliNET.Test
         {
             Assert.That(BooliNET.BooliUtil.CreateSha1("") == "da39a3ee5e6b4b0d3255bfef95601890afd80709");
         }
-
-
-        [Test]
-        public void TestGetResult()
-        {
-            var sc = new BooliNET.BooliSearchCondition();
-            sc.Q = "nacka";
-
-            BooliNET.Booli booli = new BooliNET.Booli(sc, "bomano", "P9pfkeJvKOKgHjvXZ4nprXVGG2kHPmXbd5NGetKS");
-            Console.WriteLine(booli.GetResult().listings[0].rooms.ToString());
-            Assert.That(true == false);
-        }
     }
 }
