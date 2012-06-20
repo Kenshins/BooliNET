@@ -1,7 +1,0 @@
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\bin\Debug\BooliNET.dll
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\bin\Debug\BooliNET.pdb
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\bin\Debug\Newtonsoft.Json.dll
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\bin\Debug\Newtonsoft.Json.xml
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\obj\Debug\BooliNET.dll
-C:\Documents and Settings\Martin\My Documents\GitHub\BooliNET\BooliNET\obj\Debug\BooliNET.pdb
