@@ -11,32 +11,32 @@ namespace BooliNET
 {
     public class Booli
     {
-        BooliSearchCondition searchCond;
-        string callerId;
-        string key;
+        BooliSearchCondition SearchCondition;
+        string CallerId;
+        string Key;
 
-        public Booli(BooliSearchCondition sC, string cId, string k)
+        public Booli(BooliSearchCondition searchCondition, string callerId, string key)
         {
-            init(sC, cId, k);
+            init(searchCondition, callerId, key);
         }
 
-        private void init(BooliSearchCondition sC, string cId, string k)
+        private void init(BooliSearchCondition searchCondition, string callerId, string key)
         {
 
-            if (cId == "")
+            if (callerId == "")
                 throw new ArgumentException("CallerId can not be empty!", "CallerId");
 
-            if (k == "")
+            if (key == "")
                 throw new ArgumentException("Key can not be empty!", "Key");
 
-            searchCond = sC;
-            callerId = cId;
-            key = k;
+            SearchCondition = searchCondition;
+            CallerId = callerId;
+            Key = key;
         }
 
         public Result GetResult()
         {
-            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchCond.CreateUrl(), callerId, key));
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(SearchCondition.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<Result>(jsonString);
         }
     }
@@ -296,7 +296,7 @@ namespace BooliNET
 
             if (limit != -1)
             {
-                urlConstructorString.Append("limit=" + offset.ToString());
+                urlConstructorString.Append("&limit=" + limit.ToString());
             }
             else
             {
@@ -622,7 +622,7 @@ namespace BooliNET
         public string objectType { get; set; }
         public Source source { get; set; }
         public int rooms { get; set; }
-        public int livingArea { get; set; }
+        public double livingArea { get; set; }
         public string plotArea { get; set; }
         public int isNewConstruction { get; set; }
         public string url { get; set; }

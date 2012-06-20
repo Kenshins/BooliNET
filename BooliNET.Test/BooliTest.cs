@@ -479,8 +479,9 @@ namespace BooliNET.Test
             sc.ClearSearch();
 
             sc.Q = "angered";
+            sc.Limit = 5;
 
-            Assert.That(sc.CreateUrl() == "offset=0&limit=3&q=angered");
+            Assert.That(sc.CreateUrl() == "offset=0&limit=5&q=angered");
         }
 
     }

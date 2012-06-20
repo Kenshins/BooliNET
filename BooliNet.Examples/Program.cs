@@ -7,12 +7,13 @@ namespace BooliNET.Examples
 {
     class Program
     {
-        const string CallerId = "";
-        const string Key = "";
+        const string CallerId = "yourBooliId"; // Supplied from booli, http://www.booli.se/api/key
+        const string Key = "P8rhkeJzKOXgHj3XZ1npRXVQG2kHPmXpd5NZetKJ"; // Supplied from booli, http://www.booli.se/api/key
 
         static void Main(string[] args)
         {
-            // Todo
+            var examples = new Examples.BooliExamples(CallerId, Key);
+            examples.RunSimpleExample();
         }
     }
 }
