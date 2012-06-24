@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 using Newtonsoft.Json;
 
@@ -578,6 +579,92 @@ namespace BooliNET
         public int limit { get; set; }
         public int offset { get; set; }
         public SearchParams searchParams { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Total count: " + totalCount.ToString() + "\n");
+            sb.Append("Count: " + count.ToString() + "\n");
+            sb.Append("Limit: " + limit.ToString() + "\n");
+            sb.Append("Offset: " + offset.ToString() + "\n\n");
+            sb.Append("Listings: \n");
+
+            foreach (Listing item in listings)
+            {
+                sb.Append("=============================================\n"); 
+                sb.Append("Booli Id: " + item.booliId.ToString() + "\n");
+                sb.Append("List Price: " + item.listPrice.ToString() + "\n");
+                sb.Append("Published: " + item.published + "\n\n");
+                sb.Append("Location: \n");
+                sb.Append("Named Areas: ");
+                foreach (string s in item.location.namedAreas)
+                {
+                    sb.Append(s + " ");
+                }
+                sb.Append("\n");
+                sb.Append("Region, Municipality Name: " + item.location.region.municipalityName + " ,County Name: " + item.location.region.countyName + "\n");
+                sb.Append("Address, City: " + item.location.address.city + " ,Street address: " + item.location.address.streetAddress + "\n");
+                sb.Append("Position, Latitude: " + item.location.position.latitude.ToString() + " ,Longitude: " + item.location.position.longitude.ToString() + "\n\n");
+                sb.Append("Object type: " + item.objectType + "\n");
+                sb.Append("Source, Name: " + item.source.name + " ,Type: " + item.source.type + " ,Url: " + item.source.url + "\n");
+                sb.Append("Rooms: " + item.rooms.ToString() + "\n");
+                sb.Append("Living Area: " + item.livingArea.ToString() + "\n");
+                sb.Append("Plot Area: " + item.plotArea + "\n");
+                sb.Append("Is new construction: " + item.isNewConstruction.ToString() + "\n");
+                sb.Append("Url: " + item.url + "\n");
+                sb.Append("Floor: " + item.floor + "\n");
+                sb.Append("Rent: " + item.rent + "\n");
+                sb.Append("\n");
+            }
+
+            return sb.ToString();
+        }
+
+        public void SetStringsToEmptyIfNull()
+        {
+            foreach (Listing item in listings)
+            {
+                if (item.published == null)
+                    item.published = "";
+
+                if (item.location.region.municipalityName == null)
+                    item.location.region.municipalityName = "";
+
+
+                if (item.location.region.countyName== null)
+                    item.location.region.countyName = "";
+
+                if (item.location.address.city == null)
+                    item.location.address.city = "";
+
+                if (item.location.address.streetAddress == null)
+                    item.location.address.streetAddress = "";
+
+                if (item.objectType == null)
+                    item.objectType = "";
+
+                if (item.source.name == null)
+                    item.source.name = "";
+
+                if (item.source.type == null)
+                    item.source.type = "";
+
+                if (item.source.url == null)
+                    item.source.url = "";
+
+                if (item.plotArea == null)
+                    item.plotArea = "";
+
+                if (item.url == null)
+                    item.url = "";
+            }
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            SetStringsToEmptyIfNull();
+        }
     }
 
     public class Region
@@ -632,6 +719,7 @@ namespace BooliNET
 
     public class SearchParams
     {
-        public int areaId { get; set; }
+        // As this can be both int and a array of strings it is currently not parsed
+        //public int areaId { get; set; }
     }
 }

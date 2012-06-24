@@ -14,6 +14,17 @@ namespace BooliNET.Examples
         {
             var examples = new Examples.BooliExamples(CallerId, Key);
             examples.RunSimpleExample();
+            
+            Console.WriteLine();
+            examples.CenterDimExample();
+            
+            Console.WriteLine();
+            examples.BboxExample();
+
+            Console.WriteLine();
+            examples.AreaIdExample();
+
+            Console.ReadKey();
         }
     }
 }
