@@ -12,6 +12,39 @@ Install-Package BooliNet
 
 For more info on Nuget please visit http://nuget.org/
 
+Example
+=======
+<pre>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using BooliNET;
+
+namespace NugetTest
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var booli = new BooliNET.Booli("yuorbooliid", "P8OfkdJvKOXgHj--your--booli-key--PmXpd5KZetHS");
+            
+            var sc = new BooliNET.BooliSearchCondition();
+            sc.Center = "59.334972,18.065504";
+            sc.Dim = "400,500";
+            sc.MinPlotArea = 100;
+            sc.MaxPlotArea = 5000;
+            sc.Limit = 5;
+
+            var result = booli.GetResult(sc);
+            Console.WriteLine("Center and Dim Example!\n");
+            Console.WriteLine(result.ToString());
+            Console.ReadKey();
+        }
+    }
+}
+</pre>
+
 License
 =======
 This Booli C# wrapper is released under the MIT License (MIT).
