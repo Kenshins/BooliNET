@@ -3,6 +3,14 @@ BooliNET
 
 A wrapper written in C# to connect to the Booli.se API.
 
+Install
+=======
+
+With Nuget:
+Install-Package BooliNet
+
+For more info on Nuget please visit http://nuget.org/
+
 License
 =======
 This Booli C# wrapper is released under the MIT License (MIT).
