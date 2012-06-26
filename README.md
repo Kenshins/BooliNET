@@ -7,6 +7,7 @@ Install
 =======
 
 With Nuget:
+
 Install-Package BooliNet
 
 For more info on Nuget please visit http://nuget.org/
