@@ -12,16 +12,15 @@ namespace BooliNET
 {
     public class Booli
     {
-        BooliSearchCondition SearchCondition;
         string CallerId;
         string Key;
 
-        public Booli(BooliSearchCondition searchCondition, string callerId, string key)
+        public Booli(string callerId, string key)
         {
-            init(searchCondition, callerId, key);
+            init(callerId, key);
         }
 
-        private void init(BooliSearchCondition searchCondition, string callerId, string key)
+        private void init(string callerId, string key)
         {
 
             if (callerId == "")
@@ -30,14 +29,13 @@ namespace BooliNET
             if (key == "")
                 throw new ArgumentException("Key can not be empty!", "Key");
 
-            SearchCondition = searchCondition;
             CallerId = callerId;
             Key = key;
         }
 
-        public Result GetResult()
+        public Result GetResult(BooliSearchCondition searchCondition)
         {
-            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(SearchCondition.CreateUrl(), CallerId, Key));
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchCondition.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<Result>(jsonString);
         }
     }

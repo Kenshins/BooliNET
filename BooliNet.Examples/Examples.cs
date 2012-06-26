@@ -31,12 +31,13 @@ namespace BooliNET.Examples.Examples
 
         public void RunSimpleExample()
         {
+            var booli = new BooliNET.Booli(CallerId, Key);
+
             var sc = new BooliNET.BooliSearchCondition();
             sc.Q = "nacka";
             sc.Limit = 5;
 
-            var booli = new BooliNET.Booli(sc, CallerId, Key);
-            var result = booli.GetResult();
+            var result = booli.GetResult(sc);
             Console.WriteLine("Simple Example\n");
             Console.WriteLine("Result:\n");
             Console.WriteLine("Count: " + result.count.ToString());
@@ -55,6 +56,8 @@ namespace BooliNET.Examples.Examples
 
         public void CenterDimExample()
         {
+            var booli = new BooliNET.Booli(CallerId, Key);
+            
             var sc = new BooliNET.BooliSearchCondition();
             sc.Center = "59.334972,18.065504";
             sc.Dim = "400,500";
@@ -62,8 +65,7 @@ namespace BooliNET.Examples.Examples
             sc.MaxPlotArea = 5000;
             sc.Limit = 5;
 
-            var booli = new BooliNET.Booli(sc, CallerId, Key);
-            var result = booli.GetResult();
+            var result = booli.GetResult(sc);
             Console.WriteLine("Center and Dim Example!\n");
             Console.WriteLine(result.ToString());
         }
@@ -71,27 +73,29 @@ namespace BooliNET.Examples.Examples
 
         public void BboxExample()
         {
+            var booli = new BooliNET.Booli(CallerId, Key);
+
             var sc = new BooliNET.BooliSearchCondition();
             sc.Bbox = "57.69330,11.96522,57.73896,12.03320";
             sc.MinPrice = 1000000;
             sc.MaxPrice = 3000000;
             sc.Limit = 5;
 
-            var booli = new BooliNET.Booli(sc, CallerId, Key);
-            var result = booli.GetResult();
+            var result = booli.GetResult(sc);
             Console.WriteLine("Bbox Example!\n");
             Console.WriteLine(result.ToString());
         }
 
         public void AreaIdExample()
         {
+            var booli = new BooliNET.Booli(CallerId, Key);
+            
             var sc = new BooliNET.BooliSearchCondition();
             sc.AreaId = "76,16";
             sc.MinRooms = 3;
             sc.Limit = 5;
 
-            var booli = new BooliNET.Booli(sc, CallerId, Key);
-            var result = booli.GetResult();
+            var result = booli.GetResult(sc);
             Console.WriteLine("Area Id Example!\n");
             Console.WriteLine(result.ToString());
         }
