@@ -701,18 +701,18 @@ namespace BooliNET
     public class Listing
     {
         public int booliId { get; set; }
-        public int listPrice { get; set; }
+        public double listPrice { get; set; }
         public string published { get; set; }
         public Location location { get; set; }
         public string objectType { get; set; }
         public Source source { get; set; }
-        public int rooms { get; set; }
+        public double rooms { get; set; }
         public double livingArea { get; set; }
         public string plotArea { get; set; }
         public int isNewConstruction { get; set; }
         public string url { get; set; }
-        public int floor { get; set; }
-        public int rent { get; set; }
+        public double floor { get; set; }
+        public double rent { get; set; }
     }
 
     public class SearchParams
