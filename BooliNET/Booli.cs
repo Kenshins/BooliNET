@@ -625,18 +625,35 @@ namespace BooliNET
                 if (item.published == null)
                     item.published = "";
 
-                if (item.location.region.municipalityName == null)
+                if (item.location.region == null)
+                {
+                    item.location.region = new Region();
                     item.location.region.municipalityName = "";
-
-
-                if (item.location.region.countyName== null)
                     item.location.region.countyName = "";
+                }
+                else
+                {
+                    if (item.location.region.municipalityName == null)
+                        item.location.region.municipalityName = "";
 
-                if (item.location.address.city == null)
+                    if (item.location.region.countyName == null)
+                        item.location.region.countyName = "";
+                }
+
+                if (item.location.address == null)
+                {
+                    item.location.address = new Address();
                     item.location.address.city = "";
-
-                if (item.location.address.streetAddress == null)
                     item.location.address.streetAddress = "";
+                }
+                else
+                {
+                    if (item.location.address.city == null)
+                        item.location.address.city = "";
+
+                    if (item.location.address.streetAddress == null)
+                        item.location.address.streetAddress = "";
+                }
 
                 if (item.objectType == null)
                     item.objectType = "";
