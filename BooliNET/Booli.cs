@@ -625,6 +625,24 @@ namespace BooliNET
                 if (item.published == null)
                     item.published = "";
 
+                if (item.location == null)
+                {
+                    item.location.namedAreas = new List<string>();
+
+                    item.location = new Location();
+                    item.location.region = new Region();
+                    item.location.region.municipalityName = "";
+                    item.location.region.countyName = "";
+
+                    item.location.address = new Address();
+                    item.location.address.city = "";
+                    item.location.address.streetAddress = "";
+
+                    item.location.position = new Position();
+                    item.location.position.latitude = 0.0;
+                    item.location.position.longitude = 0.0;
+                }
+
                 if (item.location.region == null)
                 {
                     item.location.region = new Region();
@@ -655,8 +673,23 @@ namespace BooliNET
                         item.location.address.streetAddress = "";
                 }
 
+                if (item.location.position == null)
+                {
+                    item.location.position = new Position();
+                    item.location.position.latitude = 0.0;
+                    item.location.position.longitude = 0.0;
+                }
+
                 if (item.objectType == null)
                     item.objectType = "";
+
+                if (item.source == null)
+                {
+                    item.source = new Source();
+                    item.source.name = "";
+                    item.source.type = "";
+                    item.source.url = "";
+                }
 
                 if (item.source.name == null)
                     item.source.name = "";
