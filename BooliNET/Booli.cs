@@ -124,12 +124,12 @@ namespace BooliNET
 
             if (maxListPrice != -1)
             {
-                urlConstructorString.Append("&maxListPrice=" + minListPrice.ToString());
+                urlConstructorString.Append("&maxListPrice=" + maxListPrice.ToString());
             }
 
             if (priceDecrease != false)
             {
-                urlConstructorString.Append("&priceDecrease=1" + minListPrice.ToString());
+                urlConstructorString.Append("&priceDecrease=1");
             }
 
             string retStr = urlConstructorString.ToString();

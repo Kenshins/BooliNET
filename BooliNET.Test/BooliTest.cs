@@ -450,6 +450,8 @@ namespace BooliNET.Test
             sc.Center = "1,1";
             sc.Q = "nacka";
 
+
+
             Assert.That(sc.CreateUrl() == "offset=0&limit=3&maxCreated=20100115&minCreated=20100101&objectType=villa, radhus&maxPlotArea=6000&minPlotArea=200&maxLivingArea=500&minLivingArea=10&maxRent=500&maxRooms=4&minRooms=2&maxPrice=2000000&minPrice=200000&areaId=1,2,3&bbox=-1,1,1,-1&dim=1,1&center=1,1&q=nacka");
         }
 
@@ -487,6 +489,98 @@ namespace BooliNET.Test
     }
 
     [TestFixture]
+    public class BooliSearchConditionListTest
+    {
+        [Test]
+        public void SetMinListPrice()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            sc.MinListPrice = 20000;
+            Assert.That(sc.MinListPrice == 20000);
+        }
+
+        [Test]
+        public void SetMaxListPrice()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            sc.MaxListPrice = 30000;
+            Assert.That(sc.MaxListPrice == 30000);
+        }
+
+        [Test]
+        public void SetPriceDecrease()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            sc.PriceDecrese = true;
+            Assert.That(sc.PriceDecrese == true);
+        }
+
+        [Test]
+        public void MinListPriceNegativeArgumentException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            TestDelegate throwingCode = () => sc.MinListPrice = -3;
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void MaxListPriceNegativeArgumentException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            TestDelegate throwingCode = () => sc.MaxListPrice = -4;
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void CreateUrl()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            sc.MinListPrice = 20000;
+            sc.MaxListPrice = 30000;
+            sc.PriceDecrese = true;
+
+            Assert.That(sc.CreateUrl() == "&minListPrice=20000&maxListPrice=30000&priceDecrease=1");
+        }
+
+        [Test]
+        public void SearchConditionClear()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionList();
+            sc.MinListPrice = 20000;
+            sc.MaxListPrice = 30000;
+            sc.PriceDecrese = true;
+            sc.CreateUrl();
+            sc.ClearSearch();
+
+            sc.MinListPrice = 12000;
+            sc.MaxListPrice = 40000;
+
+
+            Assert.That(sc.CreateUrl() == "&minListPrice=12000&maxListPrice=40000");
+        }
+
+    }
+
+    [TestFixture]
+    public class BooliSearchConditionSoldTest
+    {
+
+    }
+
+    [TestFixture]
+    public class BooliSearchConditionAreaTest
+    {
+
+    }
+
+    [TestFixture]
+    public class BooliSearchConditionIdTest
+    {
+
+    }
+
+
+    [TestFixture]
     public class BooliUtilTest
     {
 
@@ -506,7 +600,7 @@ namespace BooliNET.Test
             var sc = new BooliNET.SearchCondition();
             sc.Q = "angered";
 
-            string url = BooliNET.BooliUtil.CreateCompleteUrl(sc.CreateUrl(), "bomano", "P3tfkeJvKOXgHjvXZ1xpRXVGG2kHPmFpd7BZetHY");
+            string url = BooliNET.BooliUtil.CreateCompleteUrl("/listings?"+sc.CreateUrl(), "bomano", "P3tfkeJvKOXgHjvXZ1xpRXVGG2kHPmFpd7BZetHY");
             string pattern = "http://api.booli.se/listings\\?offset=0&limit=3&q=angered&callerId=bomano&time=.{10}&unique=.{16}&hash=.{40}";
             Assert.That(System.Text.RegularExpressions.Regex.IsMatch(url, pattern) == true);
         }
