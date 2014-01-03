@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Globalization;
-using System.Runtime.Serialization;
 
 using Newtonsoft.Json;
 
@@ -33,14 +33,353 @@ namespace BooliNET
             Key = key;
         }
 
-        public Result GetResult(BooliSearchCondition searchCondition)
+        public Result GetResult(SearchCondition searchCondition)
         {
-            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchCondition.CreateUrl(), CallerId, Key));
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?"+searchCondition.CreateUrl(), CallerId, Key));
+            return JsonConvert.DeserializeObject<Result>(jsonString);
+        }
+
+        public Result GetResultList(SearchCondition searchCondition, ExtendedSearchConditionList searchConditionList)
+        {
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?" + searchCondition.CreateUrl() + searchConditionList.CreateUrl(), CallerId, Key));
+            return JsonConvert.DeserializeObject<Result>(jsonString);
+        }
+
+        public Result GetResultSold(SearchCondition searchCondition, ExtendedSearchConditionSold searchConditionSold)
+        {
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/sold?" + searchCondition.CreateUrl() + searchConditionSold.CreateUrl(), CallerId, Key));
+            return JsonConvert.DeserializeObject<Result>(jsonString);
+        }
+
+        public Result GetResultArea(AreaSearchCondition searchConditionArea)
+        {
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/areas?" + searchConditionArea.CreateUrl(), CallerId, Key));
+            return JsonConvert.DeserializeObject<Result>(jsonString);
+        }
+
+        public Result GetResultId(IdSearchCondition searchConditionId)
+        {
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchConditionId.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<Result>(jsonString);
         }
     }
 
-    public class BooliSearchCondition
+    // Extended Search Conditions to fetch lists
+    public class ExtendedSearchConditionList
+    {
+        int minListPrice;
+        int maxListPrice;
+        bool priceDecrease;
+
+        StringBuilder urlConstructorString;
+
+        public ExtendedSearchConditionList()
+        {
+            urlConstructorString = new StringBuilder();
+            ClearSearch();
+        }
+
+        public void ClearSearch()
+        {
+            minListPrice = -1;
+            maxListPrice = -1;
+            priceDecrease = false;
+        }
+
+        public int MinListPrice
+        {
+            get { return minListPrice; }
+            set
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinListPrice");
+                minListPrice = value;
+            }
+        }
+
+        public int MaxListPrice
+        {
+            get { return maxListPrice; }
+            set
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxListPrice");
+                maxListPrice = value;
+            }
+        }
+
+        public bool PriceDecrese
+        {
+            get { return priceDecrease; }
+            set
+            {
+                priceDecrease = value;
+            }
+        }
+
+        public string CreateUrl()
+        {
+            if (minListPrice != -1)
+            {
+                urlConstructorString.Append("&minListPrice=" + minListPrice.ToString());
+            }
+
+            if (maxListPrice != -1)
+            {
+                urlConstructorString.Append("&maxListPrice=" + minListPrice.ToString());
+            }
+
+            if (priceDecrease != false)
+            {
+                urlConstructorString.Append("&priceDecrease=1" + minListPrice.ToString());
+            }
+
+            string retStr = urlConstructorString.ToString();
+            urlConstructorString.Clear();
+            return retStr;
+        }
+    }
+
+    // Extended Search Conditions to fetch sold
+    public class ExtendedSearchConditionSold
+    {
+        int minSoldPrice;
+        int maxSoldPrice;
+        string minSoldDate;
+        string maxSoldDate;
+
+        StringBuilder urlConstructorString;
+
+        public ExtendedSearchConditionSold()
+        {
+            urlConstructorString = new StringBuilder();
+            ClearSearch();
+        }
+
+        public void ClearSearch()
+        {
+            minSoldPrice = -1;
+            maxSoldPrice = -1;
+            minSoldDate = "";
+            maxSoldDate = "";
+        }
+
+        public int MinSoldPrice
+        {
+            get { return minSoldPrice; }
+            set
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinSoldPrice");
+                minSoldPrice = value;
+            }
+        }
+
+        public int MaxSoldPrice
+        {
+            get { return maxSoldPrice; }
+            set
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxSoldPrice");
+                maxSoldPrice = value;
+            }
+        }
+
+        public string MinSoldDate
+        {
+            get { return minSoldDate; }
+            set
+            {
+                BooliUtil.CheckCorrectDate(value, "MinSoldDate");
+                minSoldDate = value;
+            }
+        }
+
+        public string MaxSoldDate
+        {
+            get { return maxSoldDate; }
+            set
+            {
+                BooliUtil.CheckCorrectDate(value, "MaxSoldDate");
+                maxSoldDate = value;
+            }
+        }
+
+        public string CreateUrl()
+        {
+
+            if (minSoldPrice != -1)
+            {
+                urlConstructorString.Append("&minSoldPrice=" + minSoldPrice.ToString());
+            }
+
+            if (maxSoldPrice != -1)
+            {
+                urlConstructorString.Append("&maxSoldPrice=" + maxSoldPrice.ToString());
+            }
+
+            if (minSoldDate != "")
+            {
+                urlConstructorString.Append("&minSoldDate=" + minSoldDate);
+            }
+
+            if (MaxSoldDate != "")
+            {
+                urlConstructorString.Append("&maxSoldDate=" + maxSoldDate);
+            }
+
+            string retStr = urlConstructorString.ToString();
+            urlConstructorString.Clear();
+            return retStr;
+        }
+    }
+
+    public class AreaSearchCondition
+    {
+        string q;
+        string latitude;
+        string longitude;
+
+        StringBuilder urlConstructorString;
+
+        public AreaSearchCondition()
+        {
+            urlConstructorString = new StringBuilder();
+            ClearSearch();
+        }
+
+        public void ClearSearch()
+        {
+            q = "";
+            latitude = "";
+            longitude = "";
+        }
+
+        public string Q
+        {
+            get { return q; }
+            set { q = value; }
+        }
+
+        public string Latitude
+        {
+            get { return latitude; }
+            set
+            {
+                BooliUtil.LatCheck(value, "Latitude");
+                latitude = value;
+            }
+        }
+
+        public string Longitude
+        {
+            get { return longitude; }
+            set
+            {
+                BooliUtil.LongCheck(value, "Longitude");
+                longitude = value;
+            }
+        }
+
+        private void Validate()
+        {
+            if (q == "" && latitude == "" && longitude == "")
+            {
+                throw new ArgumentException("Q or Latitude and Longitude must be set to do a Area search!", "Q, Latitude, Longitude");
+            }
+
+            if (q != "" && (latitude != "" || longitude != ""))
+            {
+                throw new ArgumentException("Must set Q or Latitude and Longitude to do a Area search!", "Q, Latitude, Longitude");
+            }
+
+            if ((latitude != "" && longitude == "") || (longitude != "" && longitude == ""))
+            {
+                throw new ArgumentException("Must set Latitude and Longitude!", "Latitude, Longitude");
+            }
+        }
+
+        public string CreateUrl()
+        {
+            Validate();
+
+            if (q != "")
+            {
+                urlConstructorString.Append("q=" + q);    
+            }
+            else if (latitude != "" && longitude != "")
+            {
+                urlConstructorString.Append("lat=" + latitude + "&lng=" + longitude);
+            }
+
+            string retStr = urlConstructorString.ToString();
+            urlConstructorString.Clear();
+            return retStr;
+        }
+    }
+
+    // Todo
+    public class IdSearchCondition
+    {
+        string booliId;
+        BooliUtil.IdType idType;
+
+        StringBuilder urlConstructorString;
+
+        public IdSearchCondition()
+        {
+            urlConstructorString = new StringBuilder();
+            ClearSearch();
+        }
+
+        public void ClearSearch()
+        {
+            booliId = "";
+            idType = BooliUtil.IdType.Listings;
+        }
+
+        public string BooliId
+        {
+            get { return booliId; }
+            set { booliId = value; }
+        }
+
+        public BooliUtil.IdType IdType
+        {
+            get { return idType; }
+            set { idType = value; }
+        }
+
+        private void Validate()
+        {
+            if (booliId == "")
+            {
+                throw new ArgumentException("Must set BooliId to make Id search!", "BooliId");
+            }
+        }
+
+        public string CreateUrl()
+        {
+            Validate();
+
+            if (idType == BooliUtil.IdType.Listings)
+            {
+                urlConstructorString.Append("/listings/");
+            }
+            else if (idType == BooliUtil.IdType.Sold)
+            {
+                urlConstructorString.Append("/sold/");
+            }
+
+            if (booliId != "")
+            {
+                urlConstructorString.Append(booliId);
+            }
+
+            string retStr = urlConstructorString.ToString();
+            urlConstructorString.Clear();
+            return retStr;
+        }
+    }
+
+    public class SearchCondition
     {
         string q;
         string center;
@@ -64,7 +403,7 @@ namespace BooliNET
 
         StringBuilder urlConstructorString;
 
-        public BooliSearchCondition()
+        public SearchCondition()
         {
             urlConstructorString = new StringBuilder();
             ClearSearch();
@@ -104,7 +443,7 @@ namespace BooliNET
             get { return center; }
             set
             {
-                this.LatLongCheck(value, "Center");
+                BooliUtil.LatLongCheck(value, "Center");
                 center = value;
             }
         }
@@ -144,7 +483,7 @@ namespace BooliNET
             get { return minPrice; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MinPrice");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinPrice");
                 minPrice = value;
             }
         }
@@ -154,7 +493,7 @@ namespace BooliNET
             get { return maxPrice; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MaxPrice");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxPrice");
                 maxPrice = value;
             }
         }
@@ -164,7 +503,7 @@ namespace BooliNET
             get { return minRooms; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MinRooms");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinRooms");
                 minRooms = value;
             }
         }
@@ -174,7 +513,7 @@ namespace BooliNET
             get { return maxRooms; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MaxRooms");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxRooms");
                 maxRooms = value;
             }
         }
@@ -184,7 +523,7 @@ namespace BooliNET
             get { return maxRent; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MaxRent");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxRent");
                 maxRent = value;
             }
         }
@@ -194,7 +533,7 @@ namespace BooliNET
             get { return minLivingArea; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MinLivingArea");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinLivingArea");
                 minLivingArea = value;
             }
         }
@@ -204,7 +543,7 @@ namespace BooliNET
             get { return maxLivingArea; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MaxLivingArea");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxLivingArea");
                 maxLivingArea = value;
             }
         }
@@ -215,7 +554,7 @@ namespace BooliNET
             get { return minPlotArea; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MinPlotArea");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MinPlotArea");
                 minPlotArea = value;
             }
         }
@@ -225,7 +564,7 @@ namespace BooliNET
             get { return maxPlotArea; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "MaxPlotArea");
+                BooliUtil.CheckPositiveOrZeroInt(value, "MaxPlotArea");
                 maxPlotArea = value;
             }
         }
@@ -245,7 +584,7 @@ namespace BooliNET
             get { return minCreated; }
             set
             {
-                this.CheckCorrectDate(value, "MinCreated");
+                BooliUtil.CheckCorrectDate(value, "MinCreated");
                 minCreated = value;
             }
         }
@@ -255,7 +594,7 @@ namespace BooliNET
             get { return maxCreated; }
             set
             {
-                this.CheckCorrectDate(value, "MaxCreated");
+                BooliUtil.CheckCorrectDate(value, "MaxCreated");
                 maxCreated = value;
             }
         }
@@ -265,7 +604,7 @@ namespace BooliNET
             get { return limit; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "Limit");
+                BooliUtil.CheckPositiveOrZeroInt(value, "Limit");
                 limit = value;
             }
         }
@@ -275,7 +614,7 @@ namespace BooliNET
             get { return offset; }
             set
             {
-                this.CheckPositiveOrZeroInt(value, "Offset");
+                BooliUtil.CheckPositiveOrZeroInt(value, "Offset");
                 offset = value;
             }
         }
@@ -392,29 +731,6 @@ namespace BooliNET
             return retStr;
         }
 
-        private void LatLongCheck(string inString, string paramName)
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
-
-            string[] splitString = inString.Split(',');
-            if (splitString.Length != 2)
-            {
-                throw new ArgumentException("Latitude must be between 90 and -90 and Longitude must be between 180 and -180 and be in the format 1.0,1.0!", paramName);
-            }
-            double Lat = double.Parse(splitString[0], NumberStyles.Float);
-            double Long = double.Parse(splitString[1], NumberStyles.Float);
-
-            if (Lat < -90 || Lat > 90)
-            {
-                throw new ArgumentException("Latitude must be between 90 and -90 and Longitude must be between 90 and -90 and be in the format 1.0,1.0!", paramName);
-            }
-
-            if (Long < -180 || Long > 180)
-            {
-                throw new ArgumentException("Latitude must be between 90 and -90 and Longitude must be between 180 and -180 and be in the format 1.0,1.0!", paramName);
-            }
-        }
-
         private void DimCheck(string inString, string paramName)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -483,14 +799,6 @@ namespace BooliNET
             }
         }
 
-        private void CheckPositiveOrZeroInt(int inInt, string paramName)
-        {
-            if (inInt < 0)
-            {
-                throw new ArgumentException("Parameter must be a positive or zero integer!", paramName);
-            }
-        }
-
         private void CheckObjectType(string inString, string paramName)
         {
             string[] splitString = inString.Split(',');
@@ -534,27 +842,6 @@ namespace BooliNET
                 {
                     throw new ArgumentException("Duplicate object type " + objectType + " !", paramName);
                 }
-            }
-        }
-
-        private void CheckCorrectDate(string inString, string paramName)
-        {
-            if (inString.Length != 8)
-            {
-                throw new ArgumentException("A created date must be on the format 20100101!", paramName);
-            }
-
-            string year = inString.Substring(0, 4);
-            string month = inString.Substring(4, 2);
-            string day = inString.Substring(6, 2);
-
-            try
-            {
-                DateTime.Parse(year + "-" + month + "-" + day);
-            }
-            catch (FormatException)
-            {
-                throw new FormatException("A created date must be on the format 20100101!");
             }
         }
 

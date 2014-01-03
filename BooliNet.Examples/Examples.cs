@@ -33,7 +33,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.BooliSearchCondition();
+            var sc = new BooliNET.SearchCondition();
             sc.Q = "nacka";
             sc.Limit = 5;
 
@@ -58,7 +58,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
             
-            var sc = new BooliNET.BooliSearchCondition();
+            var sc = new BooliNET.SearchCondition();
             sc.Center = "59.334972,18.065504";
             sc.Dim = "400,500";
             sc.MinPlotArea = 100;
@@ -75,7 +75,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.BooliSearchCondition();
+            var sc = new BooliNET.SearchCondition();
             sc.Bbox = "57.69330,11.96522,57.73896,12.03320";
             sc.MinPrice = 1000000;
             sc.MaxPrice = 3000000;
@@ -90,7 +90,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
             
-            var sc = new BooliNET.BooliSearchCondition();
+            var sc = new BooliNET.SearchCondition();
             sc.AreaId = "76,16";
             sc.MinRooms = 3;
             sc.Limit = 5;
