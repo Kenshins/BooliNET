@@ -564,12 +564,146 @@ namespace BooliNET.Test
     [TestFixture]
     public class BooliSearchConditionSoldTest
     {
+        [Test]
+        public void SetMinSoldPrice()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MinSoldPrice = 21000;
+            Assert.That(sc.MinSoldPrice == 21000);
+        }
 
+        [Test]
+        public void SetMaxSoldPrice()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MaxSoldPrice = 31000;
+            Assert.That(sc.MaxSoldPrice == 31000);
+        }
+
+        [Test]
+        public void SetMinSoldCreated()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MinSoldDate = "20110102";
+            Assert.That(sc.MinSoldDate == "20110102");
+        }
+
+        [Test]
+        public void MinCreatedLenArgumentException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            TestDelegate throwingCode = () => sc.MinSoldDate = "2011010101";
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void MinCreatedFormatException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            TestDelegate throwingCode = () => sc.MinSoldDate = "20111301";
+            Assert.Throws<FormatException>(throwingCode);
+        }
+
+        [Test]
+        public void SetMaxSoldCreated()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MaxSoldDate = "20120102";
+            Assert.That(sc.MaxSoldDate == "20120102");
+        }
+
+        [Test]
+        public void MaxCreatedLenArgumentException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            TestDelegate throwingCode = () => sc.MaxSoldDate = "2012010101";
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void MaxCreatedFormatException()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            TestDelegate throwingCode = () => sc.MaxSoldDate = "20121301";
+            Assert.Throws<FormatException>(throwingCode);
+        }
+
+        [Test]
+        public void CreateUrl()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MinSoldPrice = 21000;
+            sc.MaxSoldPrice = 31000;
+            sc.MinSoldDate = "20110102";
+            sc.MaxSoldDate = "20120102";
+
+            Assert.That(sc.CreateUrl() == "&minSoldPrice=21000&maxSoldPrice=31000&minSoldDate=20110102&maxSoldDate=20120102");
+        }
+
+        [Test]
+        public void SearchConditionClear()
+        {
+            var sc = new BooliNET.ExtendedSearchConditionSold();
+            sc.MinSoldPrice = 21000;
+            sc.MaxSoldPrice = 31000;
+            sc.MinSoldDate = "20110102";
+            sc.MaxSoldDate = "20120102";
+            sc.CreateUrl();
+            sc.ClearSearch();
+
+            sc.MinSoldPrice = 8000;
+            sc.MaxSoldPrice = 80000;
+
+            Assert.That(sc.CreateUrl() == "&minSoldPrice=8000&maxSoldPrice=80000");
+        }
     }
 
     [TestFixture]
     public class BooliSearchConditionAreaTest
     {
+        [Test]
+        public void SetQ()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Q = "Nacka";
+            Assert.That(sc.Q == "Nacka");
+        }
+
+        [Test]
+        public void SetLatitude()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Latitude = "20";
+            Assert.That(sc.Latitude == "20");
+        }
+
+        [Test]
+        public void SetLongitude()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Longitude = "40";
+            Assert.That(sc.Longitude == "40");
+        }
+
+        [Test]
+        public void LatitudeException()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            TestDelegate throwingCode = () => sc.Latitude = "120";
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void LongitudeException()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            TestDelegate throwingCode = () => sc.Longitude = "220";
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        // Todo Create url
+
+        // Todo Search condition clear
 
     }
 
