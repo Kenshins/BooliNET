@@ -318,7 +318,7 @@ namespace BooliNET
     // Todo
     public class IdSearchCondition
     {
-        string booliId;
+        int booliId;
         BooliUtil.IdType idType;
 
         StringBuilder urlConstructorString;
@@ -331,14 +331,18 @@ namespace BooliNET
 
         public void ClearSearch()
         {
-            booliId = "";
+            booliId = -1;
             idType = BooliUtil.IdType.Listings;
         }
 
-        public string BooliId
+        public int BooliId
         {
             get { return booliId; }
-            set { booliId = value; }
+            set 
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "BooliId");   
+                booliId = value; 
+             }
         }
 
         public BooliUtil.IdType IdType
@@ -349,7 +353,7 @@ namespace BooliNET
 
         private void Validate()
         {
-            if (booliId == "")
+            if (booliId == -1)
             {
                 throw new ArgumentException("Must set BooliId to make Id search!", "BooliId");
             }
@@ -368,9 +372,9 @@ namespace BooliNET
                 urlConstructorString.Append("/sold/");
             }
 
-            if (booliId != "")
+            if (booliId != -1)
             {
-                urlConstructorString.Append(booliId);
+                urlConstructorString.Append(booliId.ToString());
             }
 
             string retStr = urlConstructorString.ToString();

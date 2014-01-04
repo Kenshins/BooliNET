@@ -673,23 +673,23 @@ namespace BooliNET.Test
         public void SetLatitude()
         {
             var sc = new BooliNET.AreaSearchCondition();
-            sc.Latitude = "20";
-            Assert.That(sc.Latitude == "20");
+            sc.Latitude = "20.7";
+            Assert.That(sc.Latitude == "20.7");
         }
 
         [Test]
         public void SetLongitude()
         {
             var sc = new BooliNET.AreaSearchCondition();
-            sc.Longitude = "40";
-            Assert.That(sc.Longitude == "40");
+            sc.Longitude = "40.9";
+            Assert.That(sc.Longitude == "40.9");
         }
 
         [Test]
         public void LatitudeException()
         {
             var sc = new BooliNET.AreaSearchCondition();
-            TestDelegate throwingCode = () => sc.Latitude = "120";
+            TestDelegate throwingCode = () => sc.Latitude = "120.7";
             Assert.Throws<ArgumentException>(throwingCode);
         }
 
@@ -701,16 +701,87 @@ namespace BooliNET.Test
             Assert.Throws<ArgumentException>(throwingCode);
         }
 
-        // Todo Create url
+        [Test]
+        public void CreateUrl()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Latitude = "-20.7";
+            sc.Longitude = "40.9";
 
-        // Todo Search condition clear
+            Console.WriteLine(sc.CreateUrl());
 
+            Assert.That(sc.CreateUrl() == "lat=-20.7&lng=40.9");
+        }
+
+        [Test]
+        public void SearchConditionClear()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Latitude = "20.7";
+            sc.Longitude = "-40.9";
+            sc.CreateUrl();
+            sc.ClearSearch();
+
+            sc.Q = "Nacka";
+
+            Console.WriteLine(sc.CreateUrl());
+
+            Assert.That(sc.CreateUrl() == "q=Nacka");
+        }
     }
 
     [TestFixture]
     public class BooliSearchConditionIdTest
     {
+        [Test]
+        public void SetBooliId()
+        {
+            var sc = new BooliNET.IdSearchCondition();
+            sc.BooliId = 123;
+            Assert.That(sc.BooliId == 123);
+        }
 
+        [Test]
+        public void NegativeBooliIdException()
+        {
+            var sc = new BooliNET.IdSearchCondition();
+            TestDelegate throwingCode = () => sc.BooliId = -5;
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void NoBooliIdSetException()
+        {
+            var sc = new BooliNET.IdSearchCondition();
+            sc.IdType = BooliUtil.IdType.Listings;
+            TestDelegate throwingCode = () => sc.CreateUrl();
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
+        public void CreateUrl()
+        {
+            var sc = new BooliNET.IdSearchCondition();
+            sc.BooliId = 1452;
+            sc.IdType = BooliUtil.IdType.Listings;
+
+            Assert.That(sc.CreateUrl() == "/listings/1452");
+        }
+
+        [Test]
+        public void SearchConditionClear()
+        {
+            var sc = new BooliNET.IdSearchCondition();
+            sc.BooliId = 1457;
+            sc.IdType = BooliUtil.IdType.Listings;
+            sc.CreateUrl();
+            sc.ClearSearch();
+
+            sc.BooliId = 1600;
+            sc.IdType = BooliUtil.IdType.Sold;
+
+            Assert.That(sc.CreateUrl() == "/sold/1600");
+        }
     }
 
 

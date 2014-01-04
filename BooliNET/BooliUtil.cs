@@ -132,6 +132,8 @@ namespace BooliNET
 
         public static void LatCheck(string inString, string paramName)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+
             double Lat = double.Parse(inString, NumberStyles.Float);
 
             if (Lat < -90 || Lat > 90)
@@ -142,6 +144,8 @@ namespace BooliNET
 
         public static void LongCheck(string inString, string paramName)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+
             double Long = double.Parse(inString, NumberStyles.Float);
 
             if (Long < -180 || Long > 180)
