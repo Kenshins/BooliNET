@@ -33,34 +33,34 @@ namespace BooliNET
             Key = key;
         }
 
-        public Result GetResult(SearchCondition searchCondition)
+        public ListingsResult GetResult(SearchCondition searchCondition)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?"+searchCondition.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<Result>(jsonString);
+            return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
 
-        public Result GetResultList(SearchCondition searchCondition, ExtendedSearchConditionList searchConditionList)
+        public ListingsResult GetResultList(SearchCondition searchCondition, ExtendedSearchConditionList searchConditionList)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?" + searchCondition.CreateUrl() + searchConditionList.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<Result>(jsonString);
+            return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
 
-        public Result GetResultSold(SearchCondition searchCondition, ExtendedSearchConditionSold searchConditionSold)
+        public SoldResult GetResultSold(SearchCondition searchCondition, ExtendedSearchConditionSold searchConditionSold)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/sold?" + searchCondition.CreateUrl() + searchConditionSold.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<Result>(jsonString);
+            return JsonConvert.DeserializeObject<SoldResult>(jsonString);
         }
 
-        public Result GetResultArea(AreaSearchCondition searchConditionArea)
+        public ListingsResult GetResultArea(AreaSearchCondition searchConditionArea)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/areas?" + searchConditionArea.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<Result>(jsonString);
+            return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
 
-        public Result GetResultId(IdSearchCondition searchConditionId)
+        public ListingsResult GetResultId(IdSearchCondition searchConditionId)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchConditionId.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<Result>(jsonString);
+            return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
     }
 
@@ -860,7 +860,7 @@ namespace BooliNET
 
     // Result class and friends
 
-    public class Result
+    public class ListingsResult
     {
         public int totalCount { get; set; }
         public int count { get; set; }
@@ -1006,6 +1006,152 @@ namespace BooliNET
         }
     }
 
+    public class SoldResult
+    {
+        public int totalCount { get; set; }
+        public int count { get; set; }
+        public List<Sold> sold { get; set; }
+        public int limit { get; set; }
+        public int offset { get; set; }
+        public SearchParams searchParams { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Total count: " + totalCount.ToString() + "\n");
+            sb.Append("Count: " + count.ToString() + "\n");
+            sb.Append("Limit: " + limit.ToString() + "\n");
+            sb.Append("Offset: " + offset.ToString() + "\n\n");
+            sb.Append("Listings: \n");
+
+            foreach (Sold item in sold)
+            {
+                sb.Append("=============================================\n");
+                sb.Append("Booli Id: " + item.booliId.ToString() + "\n");
+                sb.Append("Sold Price: " + item.soldPrice.ToString() + "\n");
+                sb.Append("Sold Date: " + item.soldDate + "\n\n");
+                sb.Append("Location: \n");
+                sb.Append("Named Areas: ");
+                foreach (string s in item.location.namedAreas)
+                {
+                    sb.Append(s + " ");
+                }
+                sb.Append("\n");
+                sb.Append("Region, Municipality Name: " + item.location.region.municipalityName + " ,County Name: " + item.location.region.countyName + "\n");
+                sb.Append("Address, City: " + item.location.address.city + " ,Street address: " + item.location.address.streetAddress + "\n");
+                sb.Append("Position, Latitude: " + item.location.position.latitude.ToString() + " ,Longitude: " + item.location.position.longitude.ToString() + "\n\n");
+                sb.Append("Object type: " + item.objectType + "\n");
+                sb.Append("Source, Name: " + item.source.name + " ,Type: " + item.source.type + " ,Url: " + item.source.url + "\n");
+                sb.Append("Rooms: " + item.rooms.ToString() + "\n");
+                sb.Append("Living Area: " + item.livingArea.ToString() + "\n");
+                sb.Append("Plot Area: " + item.plotArea + "\n");
+                sb.Append("Is new construction: " + item.isNewConstruction.ToString() + "\n");
+                sb.Append("Url: " + item.url + "\n");
+                sb.Append("Floor: " + item.floor + "\n");
+                sb.Append("Rent: " + item.rent + "\n");
+                sb.Append("\n");
+            }
+
+            return sb.ToString();
+        }
+
+        public void SetStringsToEmptyIfNull()
+        {
+            foreach (Sold item in sold)
+            {
+                if (item.soldDate == null)
+                    item.soldDate = "";
+
+                if (item.location == null)
+                {
+                    item.location.namedAreas = new List<string>();
+
+                    item.location = new Location();
+                    item.location.region = new Region();
+                    item.location.region.municipalityName = "";
+                    item.location.region.countyName = "";
+
+                    item.location.address = new Address();
+                    item.location.address.city = "";
+                    item.location.address.streetAddress = "";
+
+                    item.location.position = new Position();
+                    item.location.position.latitude = 0.0;
+                    item.location.position.longitude = 0.0;
+                }
+
+                if (item.location.region == null)
+                {
+                    item.location.region = new Region();
+                    item.location.region.municipalityName = "";
+                    item.location.region.countyName = "";
+                }
+                else
+                {
+                    if (item.location.region.municipalityName == null)
+                        item.location.region.municipalityName = "";
+
+                    if (item.location.region.countyName == null)
+                        item.location.region.countyName = "";
+                }
+
+                if (item.location.address == null)
+                {
+                    item.location.address = new Address();
+                    item.location.address.city = "";
+                    item.location.address.streetAddress = "";
+                }
+                else
+                {
+                    if (item.location.address.city == null)
+                        item.location.address.city = "";
+
+                    if (item.location.address.streetAddress == null)
+                        item.location.address.streetAddress = "";
+                }
+
+                if (item.location.position == null)
+                {
+                    item.location.position = new Position();
+                    item.location.position.latitude = 0.0;
+                    item.location.position.longitude = 0.0;
+                }
+
+                if (item.objectType == null)
+                    item.objectType = "";
+
+                if (item.source == null)
+                {
+                    item.source = new Source();
+                    item.source.name = "";
+                    item.source.type = "";
+                    item.source.url = "";
+                }
+
+                if (item.source.name == null)
+                    item.source.name = "";
+
+                if (item.source.type == null)
+                    item.source.type = "";
+
+                if (item.source.url == null)
+                    item.source.url = "";
+
+                if (item.plotArea == null)
+                    item.plotArea = "";
+
+                if (item.url == null)
+                    item.url = "";
+            }
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            SetStringsToEmptyIfNull();
+        }
+    }
+
     public class Region
     {
         public string municipalityName { get; set; }
@@ -1056,9 +1202,29 @@ namespace BooliNET
         public double rent { get; set; }
     }
 
+    public class Sold
+    {
+        public int booliId { get; set; }
+        public double soldPrice { get; set; }
+        public string soldDate { get; set; }
+        public Location location { get; set; }
+        public string objectType { get; set; }
+        public Source source { get; set; }
+        public double rooms { get; set; }
+        public double livingArea { get; set; }
+        public string plotArea { get; set; }
+        public int isNewConstruction { get; set; }
+        public string url { get; set; }
+        public double floor { get; set; }
+        public double rent { get; set; }
+    }
+
     public class SearchParams
     {
         // As this can be both int and a array of strings it is currently not parsed
         //public int areaId { get; set; }
     }
 }
+
+    
+

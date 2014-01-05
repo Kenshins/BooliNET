@@ -7,22 +7,28 @@ namespace BooliNET.Examples
 {
     class Program
     {
-        const string CallerId = "yourBooliId"; // Supplied from booli, http://www.booli.se/api/key
-        const string Key = "P8rhkeJzKOXgHj3XZ1npRXVQG2kHPmXpd5NZetKJ"; // Supplied from booli, http://www.booli.se/api/key
+        const string CallerId = "bopren"; // Supplied from booli, http://www.booli.se/api/key
+        const string Key = "P8rfkeJvKOXgHjvXZ1npRXVGG2kHPmXpd5NZetHS"; // Supplied from booli, http://www.booli.se/api/key
 
         static void Main(string[] args)
         {
             var examples = new Examples.BooliExamples(CallerId, Key);
-            examples.RunSimpleExample();
+            examples.RunSimpleListingsExample();
             
             Console.WriteLine();
-            examples.CenterDimExample();
+            examples.CenterDimListingsExample();
             
             Console.WriteLine();
-            examples.BboxExample();
+            examples.BboxListingsExample();
 
             Console.WriteLine();
-            examples.AreaIdExample();
+            examples.AreaIdListingsExample();
+
+            Console.WriteLine();
+            examples.RunSimpleSoldExample();
+
+            Console.WriteLine();
+            examples.PriceSoldExample();
 
             Console.ReadKey();
         }
