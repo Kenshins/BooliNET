@@ -702,6 +702,14 @@ namespace BooliNET.Test
         }
 
         [Test]
+        public void LimitNegativeException()
+        {
+            var sc = new BooliNET.AreaSearchCondition();
+            TestDelegate throwingCode = () => sc.Limit = -5;
+            Assert.Throws<ArgumentException>(throwingCode);
+        }
+
+        [Test]
         public void CreateUrl()
         {
             var sc = new BooliNET.AreaSearchCondition();
@@ -710,7 +718,7 @@ namespace BooliNET.Test
 
             Console.WriteLine(sc.CreateUrl());
 
-            Assert.That(sc.CreateUrl() == "lat=-20.7&lng=40.9");
+            Assert.That(sc.CreateUrl() == "limit=3&lat=-20.7&lng=40.9");
         }
 
         [Test]
@@ -723,10 +731,11 @@ namespace BooliNET.Test
             sc.ClearSearch();
 
             sc.Q = "Nacka";
+            sc.Limit = 20;
 
             Console.WriteLine(sc.CreateUrl());
 
-            Assert.That(sc.CreateUrl() == "q=Nacka");
+            Assert.That(sc.CreateUrl() == "limit=20&q=Nacka");
         }
     }
 

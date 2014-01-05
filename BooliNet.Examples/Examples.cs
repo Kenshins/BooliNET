@@ -153,6 +153,63 @@ namespace BooliNET.Examples.Examples
 
         // Area examples
 
-        // Id examples
+        public void RunSimpleAreaExample()
+        {
+            var booli = new BooliNET.Booli(CallerId, Key);
+
+            var sc = new BooliNET.AreaSearchCondition();
+            sc.Latitude = "59.334979";
+            sc.Longitude = "18.065579";
+            // Limit can be set if Q is used instead of Lat/Long
+
+            var result = booli.GetResultArea(sc);
+            Console.WriteLine("Simple Area Example\n");
+            Console.WriteLine("Result:\n");
+            Console.WriteLine("Count: " + result.count.ToString());
+            Console.WriteLine("Total count: " + result.totalCount.ToString());
+
+            foreach (Areas area in result.areas)
+            {
+                Console.WriteLine("\n===========");
+                Console.WriteLine("BooliId: " + area.booliId.ToString());
+                Console.WriteLine("Name: " + area.name.ToString());
+                foreach (string t in area.types)
+                {
+                    Console.WriteLine("\tType: " + t.ToString());
+                }
+                Console.WriteLine("Parent BooliId: " + area.parentBooliId.ToString());
+                Console.WriteLine("Parent name: " + area.parentName.ToString());
+                foreach (string t in area.parentTypes)
+                {
+                    Console.WriteLine("\tParent type: " + t.ToString());
+                }
+                Console.WriteLine("Size: " + area.size.ToString());
+            }
+        }
+
+        // Sold Id examples
+
+        public void RunSimpleSoldIdExample()
+        {
+            var booli = new BooliNET.Booli(CallerId, Key);
+
+            var result = booli.GetResultIdSold(1528339);
+            Console.WriteLine("Simple Sold Example\n");
+            Console.WriteLine("Result:\n");
+            Console.WriteLine("Count: " + result.count.ToString());
+            Console.WriteLine("Total count: " + result.totalCount.ToString());
+
+            foreach (Sold listing in result.sold)
+            {
+                Console.WriteLine("\n===========");
+                Console.WriteLine("BooliId: " + listing.booliId.ToString());
+                Console.WriteLine("Sold price: " + listing.soldPrice.ToString());
+                Console.WriteLine("Living Area: " + listing.livingArea.ToString());
+                Console.WriteLine("City: " + listing.location.address.city.ToString());
+                Console.WriteLine("Street Adress: " + listing.location.address.streetAddress.ToString());
+            }
+        }
+
+        // Listings Id example is excluded as this is almost the same as Sold Id example above
     }
 }

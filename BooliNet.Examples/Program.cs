@@ -7,8 +7,8 @@ namespace BooliNET.Examples
 {
     class Program
     {
-        const string CallerId = "bopren"; // Supplied from booli, http://www.booli.se/api/key
-        const string Key = "P8rfkeJvKOXgHjvXZ1npRXVGG2kHPmXpd5NZetHS"; // Supplied from booli, http://www.booli.se/api/key
+        const string CallerId = "yourbooliid"; // Supplied from booli, http://www.booli.se/api/key
+        const string Key = "P9rfkeXvKOXgHIvXZ1npRXVGG2kHLmXpd5NIetHS"; // Supplied from booli, http://www.booli.se/api/key
 
         static void Main(string[] args)
         {
@@ -29,6 +29,12 @@ namespace BooliNET.Examples
 
             Console.WriteLine();
             examples.PriceSoldExample();
+
+            Console.WriteLine();
+            examples.RunSimpleAreaExample();
+
+            Console.WriteLine();
+            examples.RunSimpleSoldIdExample();
 
             Console.ReadKey();
         }

@@ -51,15 +51,29 @@ namespace BooliNET
             return JsonConvert.DeserializeObject<SoldResult>(jsonString);
         }
 
-        public ListingsResult GetResultArea(AreaSearchCondition searchConditionArea)
+        public AreaResult GetResultArea(AreaSearchCondition searchConditionArea)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/areas?" + searchConditionArea.CreateUrl(), CallerId, Key));
-            return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
+            return JsonConvert.DeserializeObject<AreaResult>(jsonString);
         }
 
-        public ListingsResult GetResultId(IdSearchCondition searchConditionId)
+        public SoldResult GetResultIdSold(int booliId)
         {
-            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(searchConditionId.CreateUrl(), CallerId, Key));
+            var sc = new IdSearchCondition();
+            sc.IdType = BooliUtil.IdType.Sold;
+            sc.BooliId = booliId;
+
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(sc.CreateUrl(), CallerId, Key));
+            return JsonConvert.DeserializeObject<SoldResult>(jsonString);
+        }
+
+        public ListingsResult GetResultIdListings(int booliId)
+        {
+            var sc = new IdSearchCondition();
+            sc.IdType = BooliUtil.IdType.Listings;
+            sc.BooliId = booliId;
+
+            string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl(sc.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
     }
@@ -204,7 +218,6 @@ namespace BooliNET
 
         public string CreateUrl()
         {
-
             if (minSoldPrice != -1)
             {
                 urlConstructorString.Append("&minSoldPrice=" + minSoldPrice.ToString());
@@ -236,6 +249,7 @@ namespace BooliNET
         string q;
         string latitude;
         string longitude;
+        int limit;
 
         StringBuilder urlConstructorString;
 
@@ -250,12 +264,23 @@ namespace BooliNET
             q = "";
             latitude = "";
             longitude = "";
+            limit = -1;
         }
 
         public string Q
         {
             get { return q; }
             set { q = value; }
+        }
+
+        public int Limit
+        {
+            get { return limit; }
+            set
+            {
+                BooliUtil.CheckPositiveOrZeroInt(value, "Limit");
+                limit = value;
+            }
         }
 
         public string Latitude
@@ -300,13 +325,22 @@ namespace BooliNET
         {
             Validate();
 
+            if (limit != -1)
+            {
+                urlConstructorString.Append("limit=" + limit.ToString());
+            }
+            else
+            {
+                urlConstructorString.Append("limit=3");
+            }
+
             if (q != "")
             {
-                urlConstructorString.Append("q=" + q);    
+                urlConstructorString.Append("&q=" + q);    
             }
             else if (latitude != "" && longitude != "")
             {
-                urlConstructorString.Append("lat=" + latitude + "&lng=" + longitude);
+                urlConstructorString.Append("&lat=" + latitude + "&lng=" + longitude);
             }
 
             string retStr = urlConstructorString.ToString();
@@ -374,7 +408,7 @@ namespace BooliNET
 
             if (booliId != -1)
             {
-                urlConstructorString.Append(booliId.ToString());
+                urlConstructorString.Append(booliId.ToString() + "?");
             }
 
             string retStr = urlConstructorString.ToString();
@@ -1152,6 +1186,51 @@ namespace BooliNET
         }
     }
 
+    public class AreaResult
+    {
+        public int totalCount { get; set; }
+        public int count { get; set; }
+        public List<Areas> areas { get; set; }
+        public SearchParams searchParams { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            return sb.ToString();
+        }
+
+        public void SetStringsToEmptyIfNull()
+        {
+            foreach (Areas item in areas)
+            {
+                if (item.name == null)
+                    item.name = "";
+
+                if (item.types == null)
+                {
+                    item.types = new List<string>();
+                }
+
+                if (item.parentName == null)
+                    item.parentName = "";
+
+                if (item.parentTypes == null)
+                {
+                    item.parentTypes = new List<string>();
+                }
+
+                if (item.fullName == null)
+                    item.fullName = "";
+            }
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            SetStringsToEmptyIfNull();
+        }
+    }
+
     public class Region
     {
         public string municipalityName { get; set; }
@@ -1217,6 +1296,18 @@ namespace BooliNET
         public string url { get; set; }
         public double floor { get; set; }
         public double rent { get; set; }
+    }
+
+    public class Areas
+    {
+        public int booliId { get; set; }
+        public string name { get; set; }
+        public List<string> types { get; set; }
+        public int parentBooliId { get; set; }
+        public string parentName { get; set; }
+        public List<string> parentTypes { get; set; }
+        public string fullName { get; set; }
+        public Int64 size { get; set; }
     }
 
     public class SearchParams
