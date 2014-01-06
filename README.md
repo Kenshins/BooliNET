@@ -14,6 +14,7 @@ For more info on Nuget please visit http://nuget.org/
 
 Example
 =======
+<pre>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace NugetTest
         }
     }
 }
-
+</pre>
 License
 =======
 This Booli C# wrapper is released under the MIT License (MIT).
