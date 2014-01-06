@@ -44,7 +44,7 @@ namespace NugetTest
             Console.ReadKey();
             
             // Sold example
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionSold(); //Extended search condition, empty here
             sc.Q = "Helsingborg";
             sc.MinRooms = 2;
