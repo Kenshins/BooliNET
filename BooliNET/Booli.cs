@@ -33,19 +33,19 @@ namespace BooliNET
             Key = key;
         }
 
-        public ListingsResult GetResult(SearchCondition searchCondition)
+        public ListingsResult GetResult(BooliSearchCondition searchCondition)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?"+searchCondition.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
 
-        public ListingsResult GetResultList(SearchCondition searchCondition, ExtendedSearchConditionList searchConditionList)
+        public ListingsResult GetResultList(BooliSearchCondition searchCondition, ExtendedSearchConditionList searchConditionList)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/listings?" + searchCondition.CreateUrl() + searchConditionList.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<ListingsResult>(jsonString);
         }
 
-        public SoldResult GetResultSold(SearchCondition searchCondition, ExtendedSearchConditionSold searchConditionSold)
+        public SoldResult GetResultSold(BooliSearchCondition searchCondition, ExtendedSearchConditionSold searchConditionSold)
         {
             string jsonString = BooliNET.BooliUtil.DoGetJson(BooliNET.BooliUtil.CreateCompleteUrl("/sold?" + searchCondition.CreateUrl() + searchConditionSold.CreateUrl(), CallerId, Key));
             return JsonConvert.DeserializeObject<SoldResult>(jsonString);
@@ -417,7 +417,7 @@ namespace BooliNET
         }
     }
 
-    public class SearchCondition
+    public class BooliSearchCondition
     {
         string q;
         string center;
@@ -441,7 +441,7 @@ namespace BooliNET
 
         StringBuilder urlConstructorString;
 
-        public SearchCondition()
+        public BooliSearchCondition()
         {
             urlConstructorString = new StringBuilder();
             ClearSearch();

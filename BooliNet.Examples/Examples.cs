@@ -34,7 +34,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionList(); //Extended search condition for lists, only used as argument here
             sc.Q = "Nacka";
             sc.Limit = 5;
@@ -60,7 +60,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
             
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionList(); 
             sc.Center = "59.334972,18.065504";
             sc.Dim = "400,500";
@@ -78,7 +78,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionList(); 
             sc.Bbox = "57.69330,11.96522,57.73896,12.03320";
             sc.MinPrice = 1000000;
@@ -94,7 +94,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
             
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionList(); 
             sc.AreaId = "76,16";
             sc.MinRooms = 3;
@@ -110,7 +110,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionSold(); //Extended search condition for sold, only used as argument here
             sc.Q = "Nacka";
             sc.Limit = 5;
@@ -136,7 +136,7 @@ namespace BooliNET.Examples.Examples
         {
             var booli = new BooliNET.Booli(CallerId, Key);
 
-            var sc = new BooliNET.SearchCondition();
+            var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionSold();
             sc.Q = "Helsingborg";
             sc.MinRooms = 2;
