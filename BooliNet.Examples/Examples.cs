@@ -61,9 +61,9 @@ namespace BooliNET.Examples.Examples
             var booli = new BooliNET.Booli(CallerId, Key);
             
             var sc = new BooliNET.BooliSearchCondition();
-            var esc = new BooliNET.ExtendedSearchConditionList(); 
-            sc.Center = "59.334972,18.065504";
-            sc.Dim = "400,500";
+            var esc = new BooliNET.ExtendedSearchConditionList();
+            sc.Center = "59.34674,18.0603";
+            sc.Dim = "15000,1000";
             sc.MinPlotArea = 100;
             sc.MaxPlotArea = 5000;
             sc.Limit = 5;
@@ -81,8 +81,8 @@ namespace BooliNET.Examples.Examples
             var sc = new BooliNET.BooliSearchCondition();
             var esc = new BooliNET.ExtendedSearchConditionList(); 
             sc.Bbox = "57.69330,11.96522,57.73896,12.03320";
-            sc.MinPrice = 1000000;
-            sc.MaxPrice = 3000000;
+            esc.MinListPrice = 1000000;
+            esc.MaxListPrice = 3000000;
             sc.Limit = 5;
 
             var result = booli.GetResultList(sc, esc);
